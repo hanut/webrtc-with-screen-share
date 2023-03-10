@@ -2,50 +2,7 @@ import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { ParticipantListLabels } from "../../labels";
 import { selectCallParticipants } from "../../store/call.slice";
-import PropTypes from "prop-types";
-
-const ParticipantListActionButton = ({ icon, title, id, onClick }) => {
-  return (
-    <button className="mx-2" data-id={id} title={title} onClick={onClick}>
-      {icon}
-    </button>
-  );
-};
-ParticipantListActionButton.propTypes = {
-  icon: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
-
-const ParticipantListItem = ({ name, id, onKick, onMute }) => {
-  return (
-    <div className="py-2 pl-4 participants-list-item-text flex flex-row justify-between">
-      <div>{name}</div>
-      <div>
-        <ParticipantListActionButton
-          icon="🥾"
-          title="Kick from Call"
-          id={id}
-          onClick={onKick}
-        />
-        <ParticipantListActionButton
-          icon="🔇"
-          title="Mute this person"
-          id={id}
-          onClick={onMute}
-        />
-      </div>
-    </div>
-  );
-};
-
-ParticipantListItem.propTypes = {
-  name: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  onKick: PropTypes.func.isRequired,
-  onMute: PropTypes.func.isRequired,
-};
+import ParticipantListItem from "./participants-list-item";
 
 const ParticipantsList = () => {
   const participants = useSelector(selectCallParticipants);

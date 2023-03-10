@@ -1,29 +1,23 @@
-import { useCallback, useState } from "react";
-import PropTypes from "prop-types";
+import { useCallback, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import { CallActionButtonLabels } from "../../labels";
-
-const CallActionButton = ({ label = "No Label", onClick }) => {
-  return (
-    <li
-      className="my-1 px-2 py-1 rounded-md text-center bg-red-900 cursor-pointer hover:bg-red-600 hover:scale-110 hover:translate-x-100"
-      onClick={onClick}
-    >
-      {label}
-    </li>
-  );
-};
-
-CallActionButton.propTypes = {
-  label: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
+import { callIsRunning } from "../../store/call.slice";
+import { initializeMediaStream } from "../../utils/media";
+import CallActionButton from "./call-action-button";
 
 const CallActions = () => {
+  const isRunning = useSelector(callIsRunning);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = useCallback(() => {
     setIsOpen(!isOpen);
   }, [isOpen]);
+
+  const onShareScreen = useCallback(() => {
+    recordScreen();
+    setIsOpen(false);
+  }, []);
 
   const onShareCallLink = useCallback(() => {
     alert("Sharing...");
@@ -35,6 +29,35 @@ const CallActions = () => {
     setIsOpen(false);
   }, []);
 
+  const onCallStart = useCallback(async () => {
+    await initializeMediaStream();
+    setIsOpen(false);
+  }, []);
+
+  const actions = useMemo(() => {
+    const actions = [];
+    if (isRunning) {
+      actions.push({
+        label: CallActionButtonLabels.ShareScreen,
+        onClick: onShareScreen,
+      });
+      actions.push({
+        label: CallActionButtonLabels.ShareCallLink,
+        onClick: onShareCallLink,
+      });
+      actions.push({
+        label: CallActionButtonLabels.EndCall,
+        onClick: onEndCall,
+      });
+    } else {
+      actions.push({
+        label: CallActionButtonLabels.StartCall,
+        onClick: onCallStart,
+      });
+    }
+    return actions;
+  }, [isRunning]);
+
   return (
     <div className="absolute text-left left-4 bottom-8">
       <ul
@@ -42,14 +65,9 @@ const CallActions = () => {
           isOpen ? "opacity-100" : "opacity-0"
         }`}
       >
-        <CallActionButton
-          label={CallActionButtonLabels.ShareCallLink}
-          onClick={onShareCallLink}
-        />
-        <CallActionButton
-          label={CallActionButtonLabels.EndCall}
-          onClick={onEndCall}
-        />
+        {actions.map(({ label, onClick }) => (
+          <CallActionButton label={label} onClick={onClick} key={label} />
+        ))}
       </ul>
       <button
         className={`rounded-full w-10 h-10 pb-1 text-3xl text-center bg-red-900 transition delay-150 hover:scale-110 hover:translate-x-100 ${

@@ -1,16 +1,7 @@
 import { useSelector } from "react-redux";
 import { selectCallTitle } from "../../store/call.slice";
 import CallActions from "../call-actions/call-actions";
-
-const TalkingHead = ({ name }) => {
-  return (
-    <div className="rounded-full p-8 bg-red-100">
-      <div className="rounded-full p-8 h-28 w-28 bg-red-900 text-5xl text-center items:center justify-center">
-        {name.charAt(0)}
-      </div>
-    </div>
-  );
-};
+import TalkingHead from "./talking-head";
 
 const CallScreen = () => {
   const title = useSelector(selectCallTitle);

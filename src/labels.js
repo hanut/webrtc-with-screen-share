@@ -7,6 +7,8 @@ export const CallScreenLabels = {
 };
 
 export const CallActionButtonLabels = {
+  ShareScreen: "Share Your Screen",
   ShareCallLink: "Share Call Link",
   EndCall: "End Call",
+  StartCall: "New Call",
 };

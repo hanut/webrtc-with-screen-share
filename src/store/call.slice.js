@@ -66,4 +66,11 @@ export const selectCallParticipants = createSelector(
   }
 );
 
+export const callIsRunning = createSelector(
+  selectCallStartedAt,
+  (callStartedAt) => {
+    return !!callStartedAt;
+  }
+);
+
 export default counterSlice.reducer;
