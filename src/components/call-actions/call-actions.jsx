@@ -36,7 +36,7 @@ const CallActions = () => {
   }, []);
 
   return (
-    <div className="absolute text-right right-8 bottom-8">
+    <div className="absolute text-left left-4 bottom-8">
       <ul
         className={`flex flex-col mb-6 transition delay-150 ${
           isOpen ? "opacity-100" : "opacity-0"
@@ -52,8 +52,8 @@ const CallActions = () => {
         />
       </ul>
       <button
-        className={`rounded-full w-10 h-10 pb-1 text-3xl text-center bg-red-900 transition delay-150 hover:bg-red-600 hover:scale-110 hover:translate-x-100 ${
-          isOpen && "-rotate-45"
+        className={`rounded-full w-10 h-10 pb-1 text-3xl text-center bg-red-900 transition delay-150 hover:scale-110 hover:translate-x-100 ${
+          isOpen ? "-rotate-45 opacity-100" : "opacity-30 hover:opacity-100"
         }`}
         onClick={toggleMenu}
       >
