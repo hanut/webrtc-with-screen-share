@@ -1,13 +1,25 @@
-import CallScreen from "./components/call-screen/call-screen";
+import { useSelector } from "react-redux";
+import CallActions from "./components/call-actions/call-actions";
+import CallFocusArea from "./components/call-screen/call-focus-area";
 import ParticipantsList from "./components/participants-list/participants-list";
+import { selectIsParticipantsListOpen } from "./store/call.slice";
 
 function App() {
   return (
-    <div className="flex flex-col md:flex-row w-screen h-screen md:overflow-hidden bg-black text-white">
+    <>
       <CallScreen />
-      <ParticipantsList />
-    </div>
+    </>
   );
 }
 
 export default App;
+
+export function CallScreen() {
+  return (
+    <div className="w-screen h-screen bg-black text-white overflow-hidden">
+      <CallFocusArea />
+      <ParticipantsList />
+      <CallActions />
+    </div>
+  );
+}

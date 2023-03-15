@@ -1,12 +1,23 @@
 import { useCallback, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CallActionButtonLabels } from "../../labels";
-import { callIsRunning } from "../../store/call.slice";
-import { initializeMediaStream } from "../../utils/media";
+import {
+  callIsRunning,
+  resetCall,
+  setCallStarted,
+} from "../../store/call.slice";
+import {
+  destroyMediaStream,
+  getLocalAudioState,
+  initializeMediaStream,
+  setLocalAudioState,
+} from "../../utils/media";
 import CallActionButton from "./call-action-button";
+import CallActionsFab from "./call-actions-fab";
 
 const CallActions = () => {
   const isRunning = useSelector(callIsRunning);
+  const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -24,59 +35,78 @@ const CallActions = () => {
     setIsOpen(false);
   }, []);
 
-  const onEndCall = useCallback(() => {
-    alert("Ending the call...");
+  const onEndCall = useCallback(async () => {
+    destroyMediaStream();
+    dispatch(resetCall());
+    setIsOpen(false);
+  }, []);
+
+  const onMuteSelf = useCallback(async () => {
+    await setLocalAudioState(!getLocalAudioState());
     setIsOpen(false);
   }, []);
 
   const onCallStart = useCallback(async () => {
     await initializeMediaStream();
+    dispatch(
+      setCallStarted({
+        participants: [{ name: "Hanut", id: Date.now() }],
+        title: "My Call",
+      })
+    );
     setIsOpen(false);
   }, []);
 
-  const actions = useMemo(() => {
-    const actions = [];
+  const { menuActions, callActions } = useMemo(() => {
+    const menuActions = [],
+      callActions = [];
     if (isRunning) {
-      actions.push({
-        label: CallActionButtonLabels.ShareScreen,
-        onClick: onShareScreen,
-      });
-      actions.push({
-        label: CallActionButtonLabels.ShareCallLink,
-        onClick: onShareCallLink,
-      });
-      actions.push({
-        label: CallActionButtonLabels.EndCall,
-        onClick: onEndCall,
-      });
+      menuActions.push(
+        {
+          label: CallActionButtonLabels.ShareScreen,
+          onClick: onShareScreen,
+        },
+        {
+          label: CallActionButtonLabels.ShareCallLink,
+          onClick: onShareCallLink,
+        }
+      );
+      callActions.push(
+        {
+          label: CallActionButtonLabels.EndCall,
+          onClick: onEndCall,
+        },
+        {
+          label: CallActionButtonLabels.MuteSelf,
+          onClick: onMuteSelf,
+        }
+      );
     } else {
-      actions.push({
+      menuActions.push({
         label: CallActionButtonLabels.StartCall,
         onClick: onCallStart,
       });
     }
-    return actions;
+    return { menuActions, callActions };
   }, [isRunning]);
 
   return (
-    <div className="absolute text-left left-4 bottom-8">
+    <div id="callActions" className="absolute text-left left-4 bottom-8">
       <ul
         className={`flex flex-col mb-6 transition delay-150 ${
           isOpen ? "opacity-100" : "opacity-0"
         }`}
       >
-        {actions.map(({ label, onClick }) => (
+        {menuActions.map(({ label, onClick }) => (
           <CallActionButton label={label} onClick={onClick} key={label} />
         ))}
       </ul>
-      <button
-        className={`rounded-full w-10 h-10 pb-1 text-3xl text-center bg-red-900 transition delay-150 hover:scale-110 hover:translate-x-100 ${
-          isOpen ? "-rotate-45 opacity-100" : "opacity-30 hover:opacity-100"
-        }`}
-        onClick={toggleMenu}
-      >
-        +
-      </button>
+      <CallActionsFab isOpen={isOpen} onClick={toggleMenu} />
+      <ul className="flex flex-row w-full">
+        {callActions.map(({ label, onClick }) => (
+          <CallActionButton label={label} onClick={onClick} key={label} />
+        ))}
+      </ul>
     </div>
   );
 };

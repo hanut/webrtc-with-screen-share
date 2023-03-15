@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import ParticipantListActionButton from "./participants-list-action-button";
+import "./participants-list.css";
 
 const ParticipantListItem = ({ name, id, onKick, onMute }) => {
   return (
