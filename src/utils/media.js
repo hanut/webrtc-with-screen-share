@@ -86,10 +86,6 @@ export async function initializeMediaStream() {
     return;
   }
 
-  console.log(
-    `Audio: ${mediaConstraints.audio} | Video: ${mediaConstraints.video}`
-  );
-
   try {
     const mediaStream = await navigator.mediaDevices.getUserMedia(
       mediaConstraints

@@ -1,18 +1,17 @@
-import { useSelector } from "react-redux";
-import { selectCallTitle } from "../../store/call.slice";
+import CallTitle from "./call-title";
 
 const CallFocusArea = () => {
-  const title = useSelector(selectCallTitle);
-
   return (
     <div
       id="callFocusArea"
-      className="absolute h-screen w-screen flex flex-col justify-start items-stretch"
+      className="h-full w-full flex flex-col justify-start items-center"
     >
-      <h1 className="tracking-wide text-3xl font-thin z-10 pl-4 pt-4 text-shadow">
-        {title}
-      </h1>
-      <video id="videoPlayer" className="absolute w-screen h-screen" autoPlay />
+      <CallTitle />
+      <video
+        id="videoPlayer"
+        className="left-0 right-0 -scale-x-100 h-3/4"
+        autoPlay
+      />
     </div>
   );
 };

@@ -3,15 +3,17 @@ export const ParticipantListLabels = {
   ZeroTitle: "No one has joined the call",
 };
 export const CallScreenLabels = {
-  ZeroTitle: "Title Not Set",
+  ZeroTitle: "Untitled Call",
 };
 
 export const CallActionButtonLabels = {
-  MuteSelf: "Mute/Unmute",
+  MuteSelf: "Mute",
+  UnmuteSelf: "Unmute",
   ShareScreen: "Screen Share",
   ShareCallLink: "Share Link",
   EndCall: "End",
   StartCall: "New",
+  JoinCall: "Join",
 };
 
 export const MediaErrorMessages = {

@@ -16,7 +16,7 @@ export default App;
 
 export function CallScreen() {
   return (
-    <div className="w-screen h-screen bg-black text-white overflow-hidden">
+    <div className="w-full h-full flex flex-row bg-black text-white overflow-hidden">
       <CallFocusArea />
       <ParticipantsList />
       <CallActions />

@@ -30,9 +30,13 @@ export const counterSlice = createSlice({
       // action.payload has the participant id
       state.details.participants.delete(action.payload);
     },
+    setCallTitle: (state, action) => {
+      const title = action.payload;
+      state.details.title = title;
+    },
     setCallStarted: (state, action) => {
       // action.payload has participants  list and the title of the call
-      const { participants, title } = action.payload;
+      const participants = action.payload;
       state.details.participants = {};
       participants.forEach(({ id, ...details }) => {
         state.details.participants[id] = details;
@@ -41,7 +45,6 @@ export const counterSlice = createSlice({
         }
       });
       state.details.startedAt = Date.now();
-      state.details.title = title;
     },
     resetCall: (state) => {
       state.details = initialState;
@@ -55,6 +58,7 @@ export const {
   removeParticipant,
   resetCall,
   setCallStarted,
+  setCallTitle,
 } = counterSlice.actions;
 
 export const selectIsParticipantsListOpen = (state) => state.call.isListOpen;

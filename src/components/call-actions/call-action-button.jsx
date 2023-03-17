@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 const CallActionButton = ({ label = "No Label", onClick }) => {
   return (
     <li
-      className="my-1 mx-1 w-28 py-1 rounded-md text-center bg-red-900 cursor-pointer hover:bg-red-600 hover:scale-110 hover:translate-x-100"
+      className="my-1 mx-1 w-24 text-xs py-1 px-3 rounded-sm text-center bg-white text-black hover:text-white drop-shadow-md hover:drop-shadow-xl cursor-pointer hover:bg-blue-600 hover:scale-110 hover:z-10 outline outline-1 outline-transparent hover:outline-white"
       onClick={onClick}
     >
       {label}

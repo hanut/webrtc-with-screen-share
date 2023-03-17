@@ -20,6 +20,7 @@ const CallActions = () => {
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
 
   const toggleMenu = useCallback(() => {
     setIsOpen(!isOpen);
@@ -42,70 +43,74 @@ const CallActions = () => {
   }, []);
 
   const onMuteSelf = useCallback(async () => {
-    await setLocalAudioState(!getLocalAudioState());
+    const localAudioState = getLocalAudioState();
+    await setLocalAudioState(!localAudioState);
     setIsOpen(false);
-  }, []);
+    setIsMuted(localAudioState); // Since the localAudioState is the logical inverse of mutedState
+  }, [isMuted]);
 
   const onCallStart = useCallback(async () => {
     await initializeMediaStream();
-    dispatch(
-      setCallStarted({
-        participants: [{ name: "Hanut", id: Date.now() }],
-        title: "My Call",
-      })
-    );
+    dispatch(setCallStarted([{ name: "Hanut", id: Date.now() }]));
     setIsOpen(false);
   }, []);
 
-  const { menuActions, callActions } = useMemo(() => {
-    const menuActions = [],
-      callActions = [];
-    if (isRunning) {
-      menuActions.push(
-        {
-          label: CallActionButtonLabels.ShareScreen,
-          onClick: onShareScreen,
-        },
-        {
-          label: CallActionButtonLabels.ShareCallLink,
-          onClick: onShareCallLink,
-        }
-      );
-      callActions.push(
-        {
-          label: CallActionButtonLabels.EndCall,
-          onClick: onEndCall,
-        },
-        {
-          label: CallActionButtonLabels.MuteSelf,
-          onClick: onMuteSelf,
-        }
-      );
-    } else {
-      menuActions.push({
-        label: CallActionButtonLabels.StartCall,
-        onClick: onCallStart,
-      });
-    }
-    return { menuActions, callActions };
-  }, [isRunning]);
+  const onJoinCall = useCallback(async () => {
+    alert("Joining a call...");
+  }, []);
 
   return (
-    <div id="callActions" className="absolute text-left left-4 bottom-8">
-      <ul
-        className={`flex flex-col mb-6 transition delay-150 ${
-          isOpen ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        {menuActions.map(({ label, onClick }) => (
-          <CallActionButton label={label} onClick={onClick} key={label} />
-        ))}
-      </ul>
-      <CallActionsFab isOpen={isOpen} onClick={toggleMenu} />
-      <ul className="flex flex-row w-full">
-        {callActions.map(({ label, onClick }) => (
-          <CallActionButton label={label} onClick={onClick} key={label} />
-        ))}
+    <div
+      id="callActions"
+      className="absolute w-full bottom-0 text-left px-4 pb-3"
+    >
+      {isRunning && isOpen > 0 && (
+        <>
+          <ul className="flex flex-row justify-start">
+            <CallActionButton
+              label={CallActionButtonLabels.ShareScreen}
+              onClick={onShareScreen}
+            />
+            <CallActionButton
+              label={CallActionButtonLabels.ShareCallLink}
+              onClick={onShareCallLink}
+            />
+          </ul>
+        </>
+      )}
+      <ul className="flex flex-row w-full justify-start items-center">
+        {isRunning && (
+          <li>
+            <CallActionsFab isOpen={isOpen} onClick={toggleMenu} />
+          </li>
+        )}
+        {isRunning ? (
+          <>
+            <CallActionButton
+              label={CallActionButtonLabels.EndCall}
+              onClick={onEndCall}
+            />
+            <CallActionButton
+              label={
+                isMuted
+                  ? CallActionButtonLabels.UnmuteSelf
+                  : CallActionButtonLabels.MuteSelf
+              }
+              onClick={onMuteSelf}
+            />
+          </>
+        ) : (
+          <>
+            <CallActionButton
+              label={CallActionButtonLabels.StartCall}
+              onClick={onCallStart}
+            />
+            <CallActionButton
+              label={CallActionButtonLabels.JoinCall}
+              onClick={onJoinCall}
+            />
+          </>
+        )}
       </ul>
     </div>
   );

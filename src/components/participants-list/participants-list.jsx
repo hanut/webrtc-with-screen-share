@@ -34,9 +34,9 @@ const ParticipantsList = () => {
   }
 
   return (
-    <>
+    <div className={`h-full z-20`}>
       <button
-        className={`absolute right-0 w-8 h-8 z-10 ${
+        className={`absolute right-0 top-0 w-8 h-8 z-10 ${
           !isListOpen && "bg-yellow-500"
         }`}
         title="Open the participants list"
@@ -47,7 +47,7 @@ const ParticipantsList = () => {
       {isListOpen && (
         <div
           id="callParticipantsList"
-          className="md:absolute md:right-0 bg-white text-black h-screen md:w-72 sm:w-full md:overflow-hidden"
+          className="bg-white w-full text-black h-screen md:w-72 sm:w-full md:overflow-hidden"
         >
           <h2 className="p-2 font-medium text-center">
             {ParticipantListLabels.Title}
@@ -66,7 +66,7 @@ const ParticipantsList = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
