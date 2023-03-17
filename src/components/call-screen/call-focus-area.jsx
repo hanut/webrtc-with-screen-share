@@ -1,3 +1,4 @@
+import { LocalVideoEleId, RemoteVideoEleId } from "../../utils/media";
 import CallTitle from "./call-title";
 
 const CallFocusArea = () => {
@@ -8,9 +9,16 @@ const CallFocusArea = () => {
     >
       <CallTitle />
       <video
-        id="videoPlayer"
-        className="left-0 right-0 -scale-x-100 h-3/4"
+        id={LocalVideoEleId}
+        className="left-0 right-0 -scale-x-100 h-1/2"
         autoPlay
+        playsInline
+      />
+      <video
+        id={RemoteVideoEleId}
+        className="left-0 right-0 -scale-x-100 h-1/2"
+        autoPlay
+        playsInline
       />
     </div>
   );

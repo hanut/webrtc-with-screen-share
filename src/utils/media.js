@@ -1,12 +1,16 @@
 import { MediaErrorMessages } from "../labels";
 
+export const LocalVideoEleId = "localVideoPlayer";
+export const RemoteVideoEleId = "remoteVideoPlayer";
+
 // Local stream that will be reproduced on the video.
 /**
  * @type MediaStream
  */
 export let localStream;
-// Video Element to play on
-let videoEle;
+
+export let localPeerConnection;
+export let remotePeerConnection;
 
 export async function testForVideo() {
   try {
@@ -62,8 +66,8 @@ export function getLocalAudioState() {
 
 // Initializes the media stream and sets the video element
 export async function initializeMediaStream() {
-  videoEle = document.querySelector("#videoPlayer");
-  if (!videoEle) {
+  const localVideoEle = document.querySelector(`#${LocalVideoEleId}`);
+  if (!localVideoEle) {
     return alert("Unable to find video element");
   }
   let mediaConstraints = { video: false, audio: false };
@@ -91,14 +95,14 @@ export async function initializeMediaStream() {
       mediaConstraints
     );
     localStream = mediaStream;
-    videoEle.srcObject = mediaStream;
+    localVideoEle.srcObject = mediaStream;
   } catch (error) {
     console.warn(error);
   }
 }
 
 export function destroyMediaStream() {
-  videoEle = document.querySelector("#videoPlayer");
-  videoEle.pause();
-  videoEle.srcObject = null;
+  const localVideoEle = document.querySelector(`#${LocalVideoEleId}`);
+  localVideoEle.pause();
+  localVideoEle.srcObject = null;
 }

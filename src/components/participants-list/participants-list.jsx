@@ -21,13 +21,9 @@ const ParticipantsList = () => {
     const pid = e.target.dataset.id;
     console.log("Muting the participant with id:", pid);
   }, []);
-  const handleOpenParticipantsList = useCallback(
-    (e) => {
-      console.log("toggling participants list...", isListOpen);
-      dispatch(toggleParticipantsList(!isListOpen));
-    },
-    [isListOpen]
-  );
+  const handleOpenParticipantsList = useCallback(() => {
+    dispatch(toggleParticipantsList(!isListOpen));
+  }, [isListOpen]);
 
   if (participants.length === 0) {
     return null;
@@ -37,12 +33,12 @@ const ParticipantsList = () => {
     <div className={`h-full z-20`}>
       <button
         className={`absolute right-0 top-0 w-8 h-8 z-10 ${
-          !isListOpen && "bg-yellow-500"
+          !isListOpen && "bg-white"
         }`}
-        title="Open the participants list"
+        title="Show participants list"
         onClick={handleOpenParticipantsList}
       >
-        {isListOpen ? "✖️" : "📃"}
+        {isListOpen ? "✖️" : "🤹"}
       </button>
       {isListOpen && (
         <div

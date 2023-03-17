@@ -19,7 +19,6 @@ export const counterSlice = createSlice({
     toggleParticipantsList: (state, action) => {
       // action.payload has the list state to set
       state.isListOpen = action.payload;
-      console.log("New state of isListOpen", state.isListOpen);
     },
     addParticipant: (state, action) => {
       // action.payload has complete user object
